@@ -31,6 +31,8 @@ async fn get_time() -> HttpResponse {
 async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "actix_web=info");
     env_logger::init();
+
+    println!("Start server...");
     HttpServer::new(|| {
         App::new()
             .wrap(Logger::default())
