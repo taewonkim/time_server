@@ -6,6 +6,22 @@
 	<title>Welcome</title>
 </head>
 <body>
-	<h1>Welcome to Rust! (Actix-Web)
+	<h1>Welcome to Rust! (Actix-Web)</h1>
+	<p>Show <strong>time!</strong></p>
+	<p><span id="utc_time"></span></p>
+	<p><span id="loc_time"></span></p>
+	<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+	<script>
+		$(document).ready(function() {
+			setInterval(function() {
+				$.ajax({
+					url: '/time'
+				}).done(function(data) {
+					$('#utc_time').html('UTC is ' + data.utc);
+					$('#loc_time').html('Local is ' + data.local);
+				})
+			}, 1000);
+		});
+	</script>
 </body>
 </html>

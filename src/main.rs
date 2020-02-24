@@ -14,13 +14,17 @@ struct DateTimeObj {
     local: String, 
 }    
 
-async fn get_time() -> HttpResponse {
+fn _get_time() -> DateTimeObj {
     let utc: DateTime<Utc> = Utc::now();
     let local: DateTime<Local> = DateTime::from(utc);
-    HttpResponse::Ok().json(DateTimeObj {
+    DateTimeObj {
         utc: utc.to_rfc3339(),
         local: local.to_rfc3339(),
-    })
+    }
+}
+
+async fn get_time() -> HttpResponse {
+    HttpResponse::Ok().json(_get_time())
 }
 
 #[actix_rt::main]
@@ -34,15 +38,6 @@ async fn main() -> std::io::Result<()> {
             .service(
                 fs::Files::new("/", "./static/").index_file("index.html"),
             )
-        /*
-        App::new()
-            .wrap(Logger::default())
-            .wrap(Logger::new("%a %{User-Agent}i"))
-            .service(
-                fs::Files::new("/", "./static/").index_file("index.html"),
-            )
-            .route("/time/", web::get().to(index))
-        */
     })
     .bind("0.0.0.0:5000")?
     .run()
